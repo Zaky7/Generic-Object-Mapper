@@ -17,7 +17,13 @@ class WeatherInfoService(
 
 
     fun getWeatherDataFromRedis(key: String): Mono<List<WeatherInfoEvent>> {
-        val data =  redisService.get<List<WeatherInfoEvent>>(key)
+        val data = redisService.getList<WeatherInfoEvent>(key)
+        return data
+    }
+
+
+    fun getWeatherSingleDataFromRedis(key: String): Mono<WeatherInfoEvent> {
+        val data = redisService.get<WeatherInfoEvent>(key)
         return data
     }
 

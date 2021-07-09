@@ -1,7 +1,7 @@
 package com.reactive.sse.services
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.reactive.sse.common.ObjectMapper
-import com.reactive.sse.model.WeatherInfoEvent
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -17,10 +17,24 @@ final class RedisService(
         return redisTemplate.opsForValue().set(key, objectMapper.serialize(value))
     }
 
-    inline fun <reified T> get(key: String): Mono<T> {
+    inline fun <reified T> jacksonTypeRef(): TypeReference<T> = object : TypeReference<T>() {}
+
+
+    inline fun <reified T : Any> get(key: String): Mono<T> {
         return redisTemplate.opsForValue().get(key).map { data ->
-            val value = objectMapper.deserialize<T>(data)
+            val value = objectMapper.jacksonObjectMapper.readValue(data, T::class.java)
             value
+        }
+    }
+
+    inline fun <reified T : Any> getList(key: String): Mono<List<T>> {
+        return redisTemplate.opsForValue().get(key).map { data ->
+            val type = objectMapper.jacksonObjectMapper.constructType(T::class.java)
+            val listType = objectMapper.jacksonObjectMapper.typeFactory.constructCollectionType(List::class.java, type)
+            val listData = objectMapper.deserialize(data, listType)
+
+            @Suppress("UNCHECKED_CAST")
+            listData as List<T>
         }
     }
 
@@ -30,8 +44,14 @@ final class RedisService(
             .flatMapMany { data: List<String> -> Flux.fromIterable(data) }
             .filter { data: String -> data.isNotEmpty() }
             .flatMapIterable { data: String ->
-                val value = objectMapper.deserialize<Iterable<T>>(data)
-                value
+                val type = objectMapper.jacksonObjectMapper.constructType(T::class.java)
+                val iterableType =
+                    objectMapper.jacksonObjectMapper.typeFactory.constructCollectionType(Collection::class.java, type)
+                val iterableData = objectMapper.deserialize(data, iterableType)
+
+                @Suppress("UNCHECKED_CAST")
+                iterableData as Iterable<T>
+                iterableData
             }
     }
 

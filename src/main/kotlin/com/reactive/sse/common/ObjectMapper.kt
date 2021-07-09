@@ -2,6 +2,7 @@ package com.reactive.sse.common
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -28,6 +29,10 @@ final class ObjectMapper {
 
     inline fun <reified T> deserialize(obj: String): T {
         return jacksonObjectMapper.readValue(obj, object : TypeReference<T>() {})
+    }
+
+    fun deserialize(obj: String, type: JavaType): Any {
+        return jacksonObjectMapper.readValue(obj, type)
     }
 
 }

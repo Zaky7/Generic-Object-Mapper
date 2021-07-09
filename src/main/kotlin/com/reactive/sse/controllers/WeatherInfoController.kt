@@ -15,6 +15,11 @@ import reactor.core.publisher.Mono
 class WeatherInfoController(private val weatherInfoService: WeatherInfoService) {
 
 
+    @GetMapping(value = ["/get/weather/single"])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun getWeatherSingleInfoData(@RequestParam key: String): Mono<WeatherInfoEvent> {
+        return weatherInfoService.getWeatherSingleDataFromRedis(key)
+    }
 
     @GetMapping(value = ["/get/weather"])
     @ResponseStatus(HttpStatus.CREATED)
