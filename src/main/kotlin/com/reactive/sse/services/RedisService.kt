@@ -1,7 +1,9 @@
 package com.reactive.sse.services
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.reactive.sse.common.ObjectMapper
+import com.reactive.sse.model.WeatherInfoEvent
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -17,40 +19,21 @@ final class RedisService(
         return redisTemplate.opsForValue().set(key, objectMapper.serialize(value))
     }
 
-    inline fun <reified T> jacksonTypeRef(): TypeReference<T> = object : TypeReference<T>() {}
 
-
-    inline fun <reified T : Any> get(key: String): Mono<T> {
+    inline fun <reified T : Any> get(key: String, type: TypeReference<T> = jacksonTypeRef()): Mono<T> {
         return redisTemplate.opsForValue().get(key).map { data ->
-            val value = objectMapper.jacksonObjectMapper.readValue(data, T::class.java)
+            val value = objectMapper.jacksonObjectMapper.readValue(data, type)
             value
         }
     }
 
-    inline fun <reified T : Any> getList(key: String): Mono<List<T>> {
-        return redisTemplate.opsForValue().get(key).map { data ->
-            val type = objectMapper.jacksonObjectMapper.constructType(T::class.java)
-            val listType = objectMapper.jacksonObjectMapper.typeFactory.constructCollectionType(List::class.java, type)
-            val listData = objectMapper.deserialize(data, listType)
 
-            @Suppress("UNCHECKED_CAST")
-            listData as List<T>
-        }
-    }
-
-
-    inline fun <reified T : Any> getMany(keys: List<String>): Flux<T> {
+    inline fun <reified T : Any> getMany(keys: List<String>, type: TypeReference<Iterable<T>>): Flux<T> {
         return redisTemplate.opsForValue().multiGet(keys)
             .flatMapMany { data: List<String> -> Flux.fromIterable(data) }
             .filter { data: String -> data.isNotEmpty() }
             .flatMapIterable { data: String ->
-                val type = objectMapper.jacksonObjectMapper.constructType(T::class.java)
-                val iterableType =
-                    objectMapper.jacksonObjectMapper.typeFactory.constructCollectionType(Collection::class.java, type)
-                val iterableData = objectMapper.deserialize(data, iterableType)
-
-                @Suppress("UNCHECKED_CAST")
-                iterableData as Iterable<T>
+                val iterableData = objectMapper.jacksonObjectMapper.readValue(data, type)
                 iterableData
             }
     }
