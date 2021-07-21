@@ -43,23 +43,3 @@ final class RedisService(
     }
 }
 
-//class GenericTest {
-//    val objectMapper = ObjectMapper()
-//
-//    inline fun <reified T> deserialize(str: String): T {
-//            val value = objectMapper.deserialize<T>(str)
-//            return value
-//    }
-//}
-//
-//fun main() {
-//    val test = GenericTest()
-//    val listStr = "[{\"stationId\":145,\"temperature\":256}]"
-//    val weatherInfoList = test.deserialize<List<WeatherInfoEvent>>(listStr)
-//    println(weatherInfoList is List<WeatherInfoEvent>)
-//
-//
-//    val str = "{\"stationId\":145,\"temperature\":256}"
-//    val weatherInfo = test.deserialize<WeatherInfoEvent>(str)
-//    println(weatherInfo is WeatherInfoEvent)
-//}

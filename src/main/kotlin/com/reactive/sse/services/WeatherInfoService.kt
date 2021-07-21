@@ -8,9 +8,7 @@ import reactor.core.publisher.Mono
 
 
 @Service
-class WeatherInfoService(
-    private val redisService: RedisService
-) {
+class WeatherInfoService(private val redisService: RedisService) {
 
     fun getWeatherDataFromRedis(key: String): Mono<List<WeatherInfoEvent>> {
         val data = redisService.get<List<WeatherInfoEvent>>(key)
@@ -27,4 +25,6 @@ class WeatherInfoService(
     fun getWeatherDataListFromRedis(keys: List<String>): Flux<WeatherInfoEvent> {
         return redisService.getMany(keys, jacksonTypeRef())
     }
+
+
 }

@@ -26,10 +26,14 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+	implementation("io.github.microutils:kotlin-logging:2.0.8")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive:2.5.1")
+
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 
 }
 

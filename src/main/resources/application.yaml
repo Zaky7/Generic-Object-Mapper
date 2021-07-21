@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  http2:
+    enabled: true
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 10240
+  shutdown: graceful
+spring:
+  data:
+    redis:
+      repositories:
+        enabled: false
+  lifecycle:
+    timeout-per-shutdown-phase: 40s
+  redis:
+    lettuce:
+      shutdown-timeout: 10s
+    cluster:
+      nodes: 127.0.0.1:30001,127.0.0.1:30002,127.0.0.1:30003,127.0.0.1:30004,127.0.0.1:30005,127.0.0.1:30006
+
+
+
+
+weather:
+  realtime_weather_redis_topic: realtime_weather_data
