@@ -1,7 +1,8 @@
-package com.reactive.sse.services
+package com.reactive.sse.weatherinfo.services
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.reactive.sse.model.WeatherInfoEvent
+import com.reactive.sse.common.services.RedisService
+import com.reactive.sse.weatherinfo.model.WeatherInfoEvent
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

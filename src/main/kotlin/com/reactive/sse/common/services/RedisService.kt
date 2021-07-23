@@ -1,9 +1,8 @@
-package com.reactive.sse.services
+package com.reactive.sse.common.services
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.reactive.sse.common.ObjectMapper
-import com.reactive.sse.model.WeatherInfoEvent
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -42,24 +41,3 @@ final class RedisService(
         return redisTemplate.opsForValue().delete(key)
     }
 }
-
-//class GenericTest {
-//    val objectMapper = ObjectMapper()
-//
-//    inline fun <reified T> deserialize(str: String): T {
-//            val value = objectMapper.deserialize<T>(str)
-//            return value
-//    }
-//}
-//
-//fun main() {
-//    val test = GenericTest()
-//    val listStr = "[{\"stationId\":145,\"temperature\":256}]"
-//    val weatherInfoList = test.deserialize<List<WeatherInfoEvent>>(listStr)
-//    println(weatherInfoList is List<WeatherInfoEvent>)
-//
-//
-//    val str = "{\"stationId\":145,\"temperature\":256}"
-//    val weatherInfo = test.deserialize<WeatherInfoEvent>(str)
-//    println(weatherInfo is WeatherInfoEvent)
-//}

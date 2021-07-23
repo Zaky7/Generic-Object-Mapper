@@ -1,7 +1,7 @@
-package com.reactive.sse.controllers
+package com.reactive.sse.weatherinfo.controllers
 
-import com.reactive.sse.model.WeatherInfoEvent
-import com.reactive.sse.services.WeatherInfoService
+import com.reactive.sse.weatherinfo.model.WeatherInfoEvent
+import com.reactive.sse.weatherinfo.services.WeatherInfoService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

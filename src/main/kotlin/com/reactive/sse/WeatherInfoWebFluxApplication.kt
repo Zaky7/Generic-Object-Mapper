@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
 @EnableScheduling
-class SseServerWebFluxApplication
+class WeatherInfoWebFluxApplication
 
 fun main(args: Array<String>) {
-    runApplication<SseServerWebFluxApplication>(*args)
+    runApplication<WeatherInfoWebFluxApplication>(*args)
 }
 
