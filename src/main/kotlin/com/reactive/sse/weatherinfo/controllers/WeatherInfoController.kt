@@ -3,32 +3,31 @@ package com.reactive.sse.weatherinfo.controllers
 import com.reactive.sse.weatherinfo.model.WeatherInfoEvent
 import com.reactive.sse.weatherinfo.services.WeatherInfoService
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 
 @RestController
+    @RequestMapping("/weather")
 class WeatherInfoController(private val weatherInfoService: WeatherInfoService) {
 
 
-    @GetMapping(value = ["/get/weather/single"])
+    @GetMapping(value = ["/single"])
     @ResponseStatus(HttpStatus.CREATED)
     fun getWeatherSingleInfoData(@RequestParam key: String): Mono<WeatherInfoEvent> {
         return weatherInfoService.getWeatherSingleDataFromRedis(key)
     }
 
-    @GetMapping(value = ["/get/weather"])
+
+    @GetMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun getWeatherInfoData(@RequestParam key: String): Mono<List<WeatherInfoEvent>> {
         return weatherInfoService.getWeatherDataFromRedis(key)
     }
 
 
-    @GetMapping(value = ["/get/weather/list"])
+    @GetMapping(value = ["/list"])
     @ResponseStatus(HttpStatus.CREATED)
     fun getWeatherInfoListData(@RequestParam keys: List<String>): Flux<WeatherInfoEvent> {
         return weatherInfoService.getWeatherDataListFromRedis(keys)

@@ -12,8 +12,8 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
     min-response-size: 10240
 
-#logging:
-#  level:
-#    com.reactive: TRACE
-#    root: DEBUG # default is INFO
-#    org.hibernate: DEBUG
+logging:
+  level:
+    com.reactive: TRACE
+    root: DEBUG # default is INFO
+    org.hibernate: DEBUG

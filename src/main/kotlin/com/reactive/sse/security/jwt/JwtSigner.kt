@@ -1,5 +1,6 @@
 package com.reactive.sse.security.jwt
 
+import com.reactive.sse.user.Role
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -24,9 +25,12 @@ class JwtSigner {
      * @param userId
      * @return
      */
-    fun createJwt(userId: String): String {
+    fun createJwt(userId: String, roles: List<Role>): String {
+        val claims: MutableMap<String, Any?> = HashMap()
+        claims["role"] = roles
         return Jwts.builder().signWith(keyPair.private, SignatureAlgorithm.RS256)
             .setSubject(userId)
+            .setClaims(claims)
             .setIssuer("identity")
             .setExpiration(Date.from(Instant.now().plus(Duration.ofMinutes(15))))
             .setIssuedAt(Date.from(Instant.now()))

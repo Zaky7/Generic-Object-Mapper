@@ -16,7 +16,7 @@ class UserController(private val jwtSigner: JwtSigner) {
 
     // Mock for Db call
     private val users: MutableMap<String, UserCredentials> = mutableMapOf(
-        "test@gmail.com" to UserCredentials("test@gmail.com", "secret")
+        "test@gmail.com" to UserCredentials("test@gmail.com", "secret", listOf(Role.ROLE_ADMIN))
     )
 
 
@@ -32,7 +32,7 @@ class UserController(private val jwtSigner: JwtSigner) {
         return Mono.justOrEmpty(users[user.email])
             .filter { it.password == user.password }
             .map {
-                val jwt = jwtSigner.createJwt(it.email)
+                val jwt = jwtSigner.createJwt(it.email, it.roles)
                 val authCookie = ResponseCookie.fromClientResponse("X-Auth", jwt).maxAge(3600)
                     .httpOnly(true).path("/")
                     .secure(false) // true in production

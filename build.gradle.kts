@@ -39,6 +39,9 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$JWT_VERSION")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$JWT_VERSION")
 
+	// Logger
+	implementation("io.github.microutils:kotlin-logging:2.0.8")
+
 
 	testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
