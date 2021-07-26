@@ -7,7 +7,7 @@ enum class Role {
 
 data class UserCredentials(val username: String, val password: String)
 
-data class AuthResponse(private val token: String)
+data class AuthResponse(val token: String)
 
 data class Message (private val content: String)
 

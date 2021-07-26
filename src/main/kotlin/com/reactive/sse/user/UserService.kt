@@ -18,4 +18,10 @@ class UserService {
     fun findByUsername(username: String): Mono<User> {
         return Mono.justOrEmpty(data[username])
     }
+
+    fun setUser(name: String, pass: String): User {
+        val user = User(name, pass, true, listOf(Role.ROLE_USER))
+        data[name] = user
+        return user
+    }
 }

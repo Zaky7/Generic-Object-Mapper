@@ -1,5 +1,5 @@
 server:
-  port: 9443
+  port: 7443
   http2:
     enabled: true
   ssl:

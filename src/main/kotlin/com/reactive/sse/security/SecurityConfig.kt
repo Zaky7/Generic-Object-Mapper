@@ -1,6 +1,7 @@
 package com.reactive.sse.security
 
 import com.reactive.sse.security.jwt.JwtReactiveAuthenticationManager
+import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -20,14 +21,18 @@ class SecurityConfig(
     private val securityContextRepository: SecurityContextRepository
 ) {
 
+    private val logger = KotlinLogging.logger {}
+
 
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http
             .exceptionHandling()
-            .authenticationEntryPoint { swe: ServerWebExchange, _: AuthenticationException? ->
+            .authenticationEntryPoint { swe: ServerWebExchange, ex: AuthenticationException? ->
+                logger.error(ex) { "Authentication exception" }
                 Mono.fromRunnable { swe.response.statusCode = HttpStatus.UNAUTHORIZED }
-            }.accessDeniedHandler { swe: ServerWebExchange, _: AccessDeniedException? ->
+            }.accessDeniedHandler { swe: ServerWebExchange, ex: AccessDeniedException? ->
+                logger.error(ex) { "Authorization exception" }
                 Mono.fromRunnable { swe.response.statusCode = HttpStatus.FORBIDDEN }
             }.and()
             .csrf().disable()
@@ -37,7 +42,8 @@ class SecurityConfig(
             .securityContextRepository(securityContextRepository)
             .authorizeExchange()
             .pathMatchers(HttpMethod.OPTIONS).permitAll()
-            .pathMatchers("/login").permitAll()
+            .pathMatchers("/user/login").permitAll()
+            .pathMatchers("/user/signup").permitAll()
             .anyExchange().authenticated()
             .and().build()
     }

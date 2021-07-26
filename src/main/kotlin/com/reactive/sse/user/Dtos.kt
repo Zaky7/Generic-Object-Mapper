@@ -8,11 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.util.stream.Collectors
 
 
-data class UserCredentials(val email: String, val password: String)
 
 
-class User(private val uname: String,
-           private val pass: String,
+class User(private val username: String,
+           private val password: String,
            private val enabled: Boolean,
            private val roles: List<Role>) : UserDetails {
 
@@ -24,10 +23,10 @@ class User(private val uname: String,
     fun getRoles(): List<Role> = this.roles
 
     @JsonIgnore
-    override fun getPassword(): String = this.pass
+    override fun getPassword(): String = this.password
 
 
-    override fun getUsername(): String = this.uname
+    override fun getUsername(): String = this.username
 
 
     override fun isAccountNonExpired(): Boolean = false

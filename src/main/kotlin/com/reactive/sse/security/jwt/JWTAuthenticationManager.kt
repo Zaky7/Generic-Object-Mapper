@@ -13,8 +13,8 @@ import kotlin.reflect.typeOf
 
 
 @Component
-class JwtReactiveAuthenticationManager : ReactiveAuthenticationManager {
-    private val jwtUtil: JWTUtil? = null
+class JwtReactiveAuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthenticationManager {
+
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val authToken = authentication.credentials.toString()
         val username = jwtUtil!!.getUsernameFromToken(authToken)
@@ -27,7 +27,7 @@ class JwtReactiveAuthenticationManager : ReactiveAuthenticationManager {
                 val rolesMap: List<String> = temp.map { it.toString() }
                 UsernamePasswordAuthenticationToken(
                     username,
-                    null,
+                    authentication.credentials as String,
                     rolesMap.stream().map { value -> SimpleGrantedAuthority(value) }.toList()
                 );
             }
