@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 
 
 @RestController
-    @RequestMapping("/weather")
+@RequestMapping("/weather")
 class WeatherInfoController(private val weatherInfoService: WeatherInfoService) {
 
 

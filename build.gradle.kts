@@ -34,10 +34,6 @@ dependencies {
 	// redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive:2.5.1")
 
-	// JJWT
-	implementation("io.jsonwebtoken:jjwt-api:$JWT_VERSION")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:$JWT_VERSION")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$JWT_VERSION")
 
 	// Logger
 	implementation("io.github.microutils:kotlin-logging:2.0.8")

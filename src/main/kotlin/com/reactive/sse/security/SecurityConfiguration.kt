@@ -1,6 +1,7 @@
 package com.reactive.sse.security
 
-import com.reactive.sse.security.jwt.JwtReactiveAuthenticationManager
+import com.reactive.sse.security.jwt.PreReactiveAuthenticatedManager
+import com.reactive.sse.security.jwt.PreReactiveAuthenticatedConverter
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,7 +13,6 @@ import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
-import org.springframework.security.web.server.authentication.ServerAuthenticationConverter
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
@@ -26,11 +26,11 @@ class SecurityConfiguration {
     @Bean
     fun securityWebFilterChain(
         http: ServerHttpSecurity,
-        jwtReactiveAuthenticationManager: JwtReactiveAuthenticationManager,
-        jwtAuthenticationConverter: ServerAuthenticationConverter
+        preReactiveAuthenticatedManager: PreReactiveAuthenticatedManager,
+        preReactiveAuthenticatedConverter: PreReactiveAuthenticatedConverter
     ): SecurityWebFilterChain {
-        val authenticationWebFilter = AuthenticationWebFilter(jwtReactiveAuthenticationManager)
-        authenticationWebFilter.setServerAuthenticationConverter(jwtAuthenticationConverter)
+        val preAuthenticatedWebFilter = AuthenticationWebFilter(preReactiveAuthenticatedManager)
+        preAuthenticatedWebFilter.setServerAuthenticationConverter(preReactiveAuthenticatedConverter)
 
         return http
             .exceptionHandling()
@@ -42,13 +42,10 @@ class SecurityConfiguration {
                 Mono.fromRunnable { swe.response.statusCode = HttpStatus.FORBIDDEN }
             }.and()
             .authorizeExchange()
-            .pathMatchers("/user/signup").permitAll()
-            .pathMatchers("/user/login").permitAll()
-            .pathMatchers("/user").authenticated()
             .pathMatchers("/weather/single").hasRole("USER")
-            .pathMatchers("/weather/list").hasRole("ADMIN")
+            .pathMatchers("/weather/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
             .and()
-            .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+            .addFilterAt(preAuthenticatedWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .httpBasic().disable()
             .csrf().disable()
             .formLogin().disable()
