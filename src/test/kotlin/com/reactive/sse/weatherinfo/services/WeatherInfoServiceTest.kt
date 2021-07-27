@@ -3,7 +3,6 @@ package com.reactive.sse.weatherinfo.services
 import com.reactive.sse.common.ObjectMapper
 import com.reactive.sse.common.services.RedisService
 import com.reactive.sse.weatherinfo.model.WeatherInfoEvent
-import com.reactive.sse.weatherinfo.services.WeatherInfoService
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test

@@ -1,7 +1,7 @@
 package com.reactive.sse.security
 
-import com.reactive.sse.security.jwt.PreReactiveAuthenticatedManager
 import com.reactive.sse.security.jwt.PreReactiveAuthenticatedConverter
+import com.reactive.sse.security.jwt.PreReactiveAuthenticatedManager
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -12,6 +12,6 @@ enum class Role {
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class RolesBody (
+data class RolesBody(
     val roles: List<String>
 )

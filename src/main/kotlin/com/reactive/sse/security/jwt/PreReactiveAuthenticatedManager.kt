@@ -16,7 +16,7 @@ class PreReactiveAuthenticatedManager(private val objectMapper: ObjectMapper) : 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         return Mono.just(authentication)
             .map { authenticationObj: Authentication ->
-                val roles = authenticationObj.credentials as List<String>
+                val roles: List<String> = (authenticationObj.credentials as List<*>).filterIsInstance<String>()
                 val rolesAuthority = roles.stream().map { value -> SimpleGrantedAuthority(value) }.toList()
                 UsernamePasswordAuthenticationToken(
                     roles,
