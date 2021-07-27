@@ -5,6 +5,7 @@ import com.reactive.sse.security.jwt.PreReactiveAuthenticatedConverter
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
@@ -43,7 +44,8 @@ class SecurityConfiguration {
             }.and()
             .authorizeExchange()
             .pathMatchers("/weather/single").hasRole("USER")
-            .pathMatchers("/weather/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .pathMatchers(HttpMethod.GET, "/weather/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .pathMatchers(HttpMethod.POST, "/weather/**").hasAnyRole("SUPER_ADMIN")
             .and()
             .addFilterAt(preAuthenticatedWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .httpBasic().disable()

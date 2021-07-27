@@ -32,4 +32,11 @@ class WeatherInfoController(private val weatherInfoService: WeatherInfoService) 
     fun getWeatherInfoListData(@RequestParam keys: List<String>): Flux<WeatherInfoEvent> {
         return weatherInfoService.getWeatherDataListFromRedis(keys)
     }
+
+
+    @PostMapping(value = ["/list"])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun getWeatherInfoListDataPost(@RequestParam keys: List<String>): Flux<WeatherInfoEvent> {
+        return weatherInfoService.getWeatherDataListFromRedis(keys)
+    }
 }
